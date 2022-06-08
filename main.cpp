@@ -11,8 +11,8 @@ float Importe_t_pagar[5], Configuracion_tienda[4];
 
 /*===========GUARDAR_DATOS============*/
 
-void Guardar_Lista_de_Cocinas () {
-  string s1[6], s2[5];
+void Guardar_Lista_de_Cocinas() {
+  string s1[6], s2[6];
   ifstream Lista_Cocinas;
   Lista_Cocinas.open("cocina-data.txt");
   if (!Lista_Cocinas.is_open()) {
@@ -49,9 +49,9 @@ void Guardar_Configuracion() {
 
 
 void DESCRIBE(int x) {
-  for (int j = 0; j < 6; j++) {
+  for (int j = 1; j < 6; j++) {
     cout << indice[j] << Cocinas[x][j] << endl;
-    }
+  }
 }
 
 /* ==========CONFIGURACION========== */
@@ -369,6 +369,13 @@ void Consultar_Cocina () {
 void Mostrar_Mantenimiento () {
   
   int opcion_Mant;
+  indice[0] = "MODELO     : ";
+  indice[1] = "PRECIO     : ";
+  indice[2] = "ALTO       : ";
+  indice[3] = "ANCHO      : "; 
+  indice[4] = "FONDO      : ";
+  indice[5] = "QUEMADORES : ";
+  
   
   cout << "1 = Cosultar Cocina\n2 = Modificar Cocina\n3 = Lista de Cocinas\n";
   cout << "Elija la opción: ";
@@ -457,16 +464,12 @@ void Mostrar_Menu () {
 }
 
 
+
 int main() {
 
-indice[0] = "MODELO     : ";
-indice[1] = "PRECIO     : ";
-indice[2] = "ALTO       : ";
-indice[3] = "ANCHO      : "; 
-indice[4] = "FONDO      : ";
-indice[5] = "QUEMADORES : ";
-  
 Guardar_Lista_de_Cocinas();
 Guardar_Configuracion();
 Mostrar_Menu();
+  
+return 0;
 }
