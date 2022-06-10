@@ -14,21 +14,26 @@ float Importe_t_pagar[5], Configuracion_tienda[4];
 void Guardar_Lista_de_Cocinas() {
   string s1[6], s2[6];
   ifstream Lista_Cocinas;
+  
   Lista_Cocinas.open("cocina-data.txt");
-  if (!Lista_Cocinas.is_open()) {
-    cout << "Error" << endl;
-  }
-  //ASIGNACION+1
-  for (int i = 0; i < 6; i++) {
-    Lista_Cocinas >> s1[i] >> s2[i];
-    for (int j = 0; j < 5; j++){
+  
+  if (Lista_Cocinas.is_open()) {
+    for (int i = 0; i < 6; i++) {//deveria ser 5
+      Lista_Cocinas >> s1[i] >> s2[i];
+      for (int j = 0; j < 5; j++) {//
       Lista_Cocinas >> Cocinas[i][j+1];
+      }
     }
+    
+    for (int i = 0; i < 6; i++) {
+      Cocinas[i][0] = s1[i] + " " + s2[i];
+    }  
+    
+    Lista_Cocinas.close();
   }
-  for (int i = 0; i < 6; i++) {
-    Cocinas[i][0] = s1[i] + " " + s2[i];
-  }   
-Lista_Cocinas.close();
+  else {
+    cout << "No se encontro el archivo, revise" << endl;
+  }
 }
 
 void Guardar_Configuracion() {

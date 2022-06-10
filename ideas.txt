@@ -1,0 +1,1 @@
+1: Eliminar la funcion "Lista de cocinas"
