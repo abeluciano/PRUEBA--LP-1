@@ -188,7 +188,6 @@ void Mostrar_Vender_Cocina() {
   cout << "Elija la opcion: ";
   cin >> Opc_VCocina;
 
-  if(Opc_VCocina > 0 && Opc_VCocina < 6) {
     switch(Opc_VCocina){
       case 1: cout << "Cocina 1:\n\n";
         Vender_Cocina(Opc_VCocina-1);
@@ -210,13 +209,12 @@ void Mostrar_Vender_Cocina() {
         Vender_Cocina(Opc_VCocina-1);
         Cantidad_de_Ventas[4]++;
         break;
+      default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+        return Mostrar_Vender_Cocina();
+        break;
     } 
-  }
-  else {
-    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
-    return Mostrar_Vender_Cocina();
-  }
 }
+
 
 /*============MANTENIMIENTO==========*/
 
@@ -255,7 +253,8 @@ void Modificar_Cocina(int Indice_Cocina) {
         cout << "Indique catidad de quemadores\n";
         cin >> Cocinas[Indice_Cocina][5];
         break;
-      default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+      default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+        return Modificar_Cocina(Indice_Cocina);
         break;
     }
   }
@@ -282,26 +281,27 @@ void Mostrar_Modificar_Cocina () {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
   cout << "Elija la opcion\n";
   cin >> Opc_Modificar;
-    switch(Opc_Modificar){
-      case 1:
-        Modificar_Cocina(0);
-        break;
-      case 2: 
-        Modificar_Cocina(1);
-        break;
-      case 3: 
-        Modificar_Cocina(2);
-        break;
-      case 4: 
-        Modificar_Cocina(3);
-        break;
-      case 5:  
-        Modificar_Cocina(4);
+  switch(Opc_Modificar){
+    case 1:
+      Modificar_Cocina(0);
+      break;
+    case 2: 
+      Modificar_Cocina(1);
+      break;
+    case 3: 
+      Modificar_Cocina(2);
+      break;
+    case 4: 
+      Modificar_Cocina(3);
+      break;
+    case 5:  
+      Modificar_Cocina(4);
+      break;
+    default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+      return Mostrar_Modificar_Cocina ();
         break;
     } 
 }
-
-
 
 void Mostrar_Lista_de_Cocinas () {
   cout << "\tLISTADO DE COCINAS" << endl << endl;
@@ -337,8 +337,9 @@ void Consultar_Cocina () {
     case 5: cout << "Cocina 5:\n\n";
       Describir_Cocina(4);
       break;
-    default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
-        break;
+    default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+      return Consultar_Cocina ();
+      break;
   } 
 }
 
@@ -355,19 +356,19 @@ void Mostrar_Mantenimiento () {
   cout << "Elija la opción: ";
   cin >> Opc_Mante;
   
-    switch(Opc_Mante) {
-      case 1: cout << "Cosultar Cocina\n";
-        Consultar_Cocina();
-        break;
-      case 2: cout << "Modificar Cocina\n";
-        Mostrar_Modificar_Cocina ();
-        break;
-      case 3: cout << "\tLista de Cocinas: \n";
-        cout << endl;
-        Mostrar_Lista_de_Cocinas();
-        break;
-      default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
-        break;
+  switch(Opc_Mante) {
+    case 1: cout << "Cosultar Cocina\n";
+      Consultar_Cocina();
+      break;
+    case 2: cout << "Modificar Cocina\n";
+      Mostrar_Modificar_Cocina ();
+      break;
+    case 3: cout << "\tLista de Cocinas: \n";
+      Mostrar_Lista_de_Cocinas();
+      break;
+    default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+      return Mostrar_Mantenimiento ();
+      break;
     }
 }
 
@@ -437,7 +438,8 @@ void Mostrar_Menu () {
           return Mostrar_Menu();
         }
     break;
-    default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+    default: cout << "ERROR, LA OPCION NO EXISTE" << endl;
+      return Mostrar_Menu ();
         break;
   }
 }
