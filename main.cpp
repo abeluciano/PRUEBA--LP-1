@@ -20,9 +20,9 @@ void Guardar_Lista_de_Cocinas() {
   Lista_de_Cocinas.open("cocina-data.txt");
   
   if (Lista_de_Cocinas.is_open()) {
-    for (int i = 0; i < 5; i++) {//deveria ser 5
+    for (int i = 0; i < 5; i++) {
       Lista_de_Cocinas >> s1[i] >> s2[i];
-      for (int j = 0; j < 5; j++) {//
+      for (int j = 0; j < 5; j++) {
       Lista_de_Cocinas >> Cocinas[i][j+1];
       }
     }
@@ -50,9 +50,9 @@ void Guardar_Configuracion() {
   }
 }
 
-void Describir_Cocina(int x) {//podemos eliminarlo
+void Describir_Cocina(int NumCocina) {
   for (int j = 1; j < 6; j++) {
-    cout << Indice_de_Cocina[j] << Cocinas[x][j] << endl;
+    cout << Indice_de_Cocina[j] << Cocinas[NumCocina][j] << endl;
   }
 }
 
@@ -95,7 +95,7 @@ void Configurar_Descuento() {
 
 void Mostrar_Ventas_en_Relacion_a_la_Venta_Optima() {
 
-  cout << "VENTAS EN RELACIÓN A LA VENTA ÓPTIMA" << endl << endl;
+  cout << "\tVENTAS EN RELACIÓN A LA VENTA ÓPTIMA" << endl << endl;
 
   for (int i = 0; i < 5; i++) {
     cout << "Modelo             :  " << Cocinas[i][0] << endl;
@@ -116,13 +116,13 @@ void Mostrar_Ventas_en_Relacion_a_la_Venta_Optima() {
 
 void Mostrar_Ventas_por_Modelo() {
   
-  cout << "VENTAS POR MODELO" << endl << endl;
+  cout << "\tVENTAS POR MODELO" << endl << endl;
   
   for (int i = 0; i < 5; i++) {
-  cout << "Modelo                         :  " << Cocinas[i][0] << endl;
-  cout << "Cantidad de ventas             :  " << Cantidad_de_Ventas[i] << endl;
-  cout << "Cantidad de unidades vendidas  :  " << Cantidad_de_Unidades_Vendidas[i] << endl;
-  cout << "Importe total vendido          :  " << Importe_Total_Vendido[i] << endl << endl;
+    cout << "Modelo                         :  " << Cocinas[i][0] << endl;
+    cout << "Cantidad de ventas             :  " << Cantidad_de_Ventas[i] << endl;
+    cout << "Cantidad de unidades vendidas  :  " << Cantidad_de_Unidades_Vendidas[i] << endl;
+    cout << "Importe total vendido          :  " << Importe_Total_Vendido[i] << endl << endl;
   }
 }
  
@@ -137,7 +137,7 @@ void Vender_Cocina(int Indice_de_Cocina) {
   cout << "Elija la cantidad de cocinas a comprar: ";
   cin >> CantCocinas_a_Comprar;
   
-  Importe_Total_Vendido[Indice_de_Cocina]  += CantCocinas_a_Comprar;   //xd
+  Importe_Total_Vendido[Indice_de_Cocina]  += CantCocinas_a_Comprar;
   
   Precio = stof(Cocinas[Indice_de_Cocina][1]);
   Importe_de_Compra = CantCocinas_a_Comprar * Precio;
@@ -154,12 +154,12 @@ void Vender_Cocina(int Indice_de_Cocina) {
     Descuento = Importe_de_Compra * (Configuracion_de_Tienda[2]/100);
   }
     
-   else {
+  else {
     cout << "Revise que la cantidad sea un entero positivo" << endl;
    }
   
   Importe_Final = Importe_de_Compra - Descuento;
-  Importe_Total_Vendido[Indice_de_Cocina] = Importe_Final + Importe_Total_Vendido[Indice_de_Cocina];
+  Importe_Total_Vendido[Indice_de_Cocina] += Importe_Final;
   
   Boletas.open("boleta_<" + NBoleto + ">.txt");
   
@@ -170,11 +170,14 @@ void Vender_Cocina(int Indice_de_Cocina) {
     Boletas << "Cantidad       : " << CantCocinas_a_Comprar << endl;
     Boletas << "Importe compra : " << "S/ " << Importe_de_Compra << endl;
     Boletas << "Descuento      : " << "S/ " << Descuento << endl;
-    Boletas << "Importe pagar  : " << "S/ " << Importe_Final << endl;
-        
-    Boletas.close();   
+    Boletas << "Importe pagar  : " << "S/ " << Importe_Final << endl;     
+    Boletas.close();
+    Numero_de_Boleto ++;
   }
-  Numero_de_Boleto ++;
+  else {
+    cout << "El archivo no pudo ser cargado, vuelva a intentarlo..." << endl;
+    return Vender_Cocina(Indice_de_Cocina); 
+  }
 }
 
 void Mostrar_Vender_Cocina() {
@@ -184,29 +187,35 @@ void Mostrar_Vender_Cocina() {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n";
   cout << "Elija la opcion: ";
   cin >> Opc_VCocina;
-  
-  switch(Opc_VCocina){
-    case 1: cout << "Cocina 1:\n\n";
-      Vender_Cocina(Opc_VCocina-1);
-      Cantidad_de_Ventas[0]++;
-    break;
-    case 2: cout << "Cocina 2:\n\n";
-      Vender_Cocina(Opc_VCocina-1);
-      Cantidad_de_Ventas[1]++;
-    break;
-    case 3: cout << "Cocina 3:\n\n";
-      Vender_Cocina(Opc_VCocina-1);
-      Cantidad_de_Ventas[2]++;
-    break;
-    case 4: cout << "Cocina 4:\n\n";
-      Vender_Cocina(Opc_VCocina-1);
-      Cantidad_de_Ventas[3]++;
-    break;
-    case 5: cout << "Cocina 5:\n\n";
-      Vender_Cocina(Opc_VCocina-1);
-      Cantidad_de_Ventas[4]++;
-    break;
-  } 
+
+  if(Opc_VCocina > 0 && Opc_VCocina < 6) {
+    switch(Opc_VCocina){
+      case 1: cout << "Cocina 1:\n\n";
+        Vender_Cocina(Opc_VCocina-1);
+        Cantidad_de_Ventas[0]++;
+        break;
+      case 2: cout << "Cocina 2:\n\n";
+        Vender_Cocina(Opc_VCocina-1);
+        Cantidad_de_Ventas[1]++;
+        break;
+      case 3: cout << "Cocina 3:\n\n";
+        Vender_Cocina(Opc_VCocina-1);
+        Cantidad_de_Ventas[2]++;
+        break;
+      case 4: cout << "Cocina 4:\n\n";
+        Vender_Cocina(Opc_VCocina-1);
+        Cantidad_de_Ventas[3]++;
+        break;
+      case 5: cout << "Cocina 5:\n\n";
+        Vender_Cocina(Opc_VCocina-1);
+        Cantidad_de_Ventas[4]++;
+        break;
+    } 
+  }
+  else {
+    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
+    return Mostrar_Vender_Cocina();
+  }
 }
 
 /*============MANTENIMIENTO==========*/
@@ -246,7 +255,6 @@ void Modificar_Cocina(int Indice_Cocina) {
         cout << "Indique catidad de quemadores\n";
         cin >> Cocinas[Indice_Cocina][5];
         break;
-      
       default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
         break;
     }
@@ -274,28 +282,35 @@ void Mostrar_Modificar_Cocina () {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
   cout << "Elija la opcion\n";
   cin >> Opc_Modificar;
-  switch(Opc_Modificar){
-    case 1:
-      Modificar_Cocina(0);
-      break;
-    case 2: 
-      Modificar_Cocina(1);
-      break;
-    case 3: 
-      Modificar_Cocina(2);
-      break;
-    case 4: 
-      Modificar_Cocina(3);
-      break;
-    case 5:  
-      Modificar_Cocina(4);
-      break;
-  } 
+  if(Opc_Modificar > 0 && Opc_Modificar < 6) {
+    switch(Opc_Modificar){
+      case 1:
+        Modificar_Cocina(0);
+        break;
+      case 2: 
+        Modificar_Cocina(1);
+        break;
+      case 3: 
+        Modificar_Cocina(2);
+        break;
+      case 4: 
+        Modificar_Cocina(3);
+        break;
+      case 5:  
+        Modificar_Cocina(4);
+        break;
+    } 
+  }
+  else {
+    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
+    return Mostrar_Vender_Cocina();
+  }
 }
 
 void Mostrar_Lista_de_Cocinas () {
-  cout << "LISTADO DE COCINAS" << endl << endl;
+  cout << "\tLISTADO DE COCINAS" << endl << endl;
   for (int i = 0; i < 5; i++) {
+    cout << "============================================" << endl;
     for (int j = 0; j < 6; j++) {
       cout << Indice_de_Cocina[j] << Cocinas[i][j] << endl;
     }
@@ -326,6 +341,8 @@ void Consultar_Cocina () {
     case 5: cout << "Cocina 5:\n\n";
       Describir_Cocina(4);
       break;
+    default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+        break;
   } 
 }
 
@@ -352,6 +369,8 @@ void Mostrar_Mantenimiento () {
       case 3: cout << "\tLista de Cocinas: \n";
         cout << endl;
         Mostrar_Lista_de_Cocinas();
+        break;
+      default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
         break;
     }
 }
@@ -422,6 +441,8 @@ void Mostrar_Menu () {
           return Mostrar_Menu();
         }
     break;
+    default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+        break;
   }
 }
 

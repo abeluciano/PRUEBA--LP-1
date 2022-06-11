@@ -1,8 +1,0 @@
-BOLETA DE VENTA: 0
-
-Modelo         : Mabe EMP6120PG0
-Precio         : S/ 949.0
-Cantidad       : 12
-Importe compra : S/ 11388
-Descuento      : S/ 1423.5
-Importe pagar  : S/ 9964.5
