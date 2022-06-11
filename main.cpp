@@ -1,35 +1,37 @@
 #include <iostream>
-#include <fstream>//uso de .txt
+#include <fstream>
 #include <string>
 #include <string.h>
 
 using namespace std;
 
-string Cocinas[6][6], indice[6];
-int N_Boleto = 0, cant_ventas[5], Vec_T_unidades[5];
-float Importe_t_pagar[5], Configuracion_tienda[4];
+string Cocinas[5][6], Indice_de_Cocina[6];
+
+int Numero_de_Boleto = 0, Cantidad_de_Ventas[5], Cantidad_de_Unidades_Vendidas[5];
+
+float Importe_Total_Vendido[5], Configuracion_de_Tienda[4];
 
 /*===========GUARDAR_DATOS============*/
 
 void Guardar_Lista_de_Cocinas() {
-  string s1[6], s2[6];
-  ifstream Lista_Cocinas;
+  string s1[5], s2[5];
+  ifstream Lista_de_Cocinas;
   
-  Lista_Cocinas.open("cocina-data.txt");
+  Lista_de_Cocinas.open("cocina-data.txt");
   
-  if (Lista_Cocinas.is_open()) {
-    for (int i = 0; i < 6; i++) {//deveria ser 5
-      Lista_Cocinas >> s1[i] >> s2[i];
+  if (Lista_de_Cocinas.is_open()) {
+    for (int i = 0; i < 5; i++) {//deveria ser 5
+      Lista_de_Cocinas >> s1[i] >> s2[i];
       for (int j = 0; j < 5; j++) {//
-      Lista_Cocinas >> Cocinas[i][j+1];
+      Lista_de_Cocinas >> Cocinas[i][j+1];
       }
     }
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
       Cocinas[i][0] = s1[i] + " " + s2[i];
     }  
     
-    Lista_Cocinas.close();
+    Lista_de_Cocinas.close();
   }
   else {
     cout << "No se encontro el archivo, revise" << endl;
@@ -39,387 +41,341 @@ void Guardar_Lista_de_Cocinas() {
 void Guardar_Configuracion() {
   ifstream Configuracion;
   Configuracion.open("config-tienda.txt");
+  
   if (Configuracion.is_open()) {
     for (int i = 0; i < 4; i++) {
-      Configuracion >> Configuracion_tienda[i];
- //     if (i < 3){
- //       Configuracion_tienda[i] = Configuracion_tienda[i] / 100;
-//      }
-    }   
-    
-  Configuracion.close();
-  }
-}
-
-
-
-void DESCRIBE(int x) {
-  for (int j = 1; j < 6; j++) {
-    cout << indice[j] << Cocinas[x][j] << endl;
-  }
-}
-
-/* ==========CONFIGURACION========== */
-
-void Cofigurar_cantidad_optima() {
-  cout << "Cantidad optima actual: " << Configuracion_tienda[3] << endl;
-  cout << "Indique la nueva cantidad optima: ";
-  cin >> Configuracion_tienda[3];
-  
-}
-
-void Configurar_descuentos() {
-  int Opc_Dsc = 0;
-  for (int i = 0; i < 3; i++) {
-    cout << i+1 << "= Descuento " << i + 1 << " : " << Configuracion_tienda[i] << endl;
+      Configuracion >> Configuracion_de_Tienda[i];
     }
-  cout << "\nIndique el descuento a modificar: ";
-  cin >> Opc_Dsc;
-  cout << endl;
-  if (Opc_Dsc > 0 && Opc_Dsc < 4) {
-    cout << "Indique el nuevo descuento: ";
-    cin >> Configuracion_tienda[Opc_Dsc-1];
+    Configuracion.close();
+  }
+}
+
+void Describir_Cocina(int x) {//podemos eliminarlo
+  for (int j = 1; j < 6; j++) {
+    cout << Indice_de_Cocina[j] << Cocinas[x][j] << endl;
+  }
+}
+
+/* ==========CONFIGURACIÓN========== */
+
+void Configurar_Cantidad_Optima() {
+  cout << "Cantidad optima actual: " << Configuracion_de_Tienda[3] << endl;
+  
+  if (Configuracion_de_Tienda[3] > 0) {
+    cout << "Indique la nueva cantidad optima: ";
+    cin >> Configuracion_de_Tienda[3];
   }
   else {
     cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
-    return Configurar_descuentos();
+    return Configurar_Cantidad_Optima();
   }
 }
 
+void Configurar_Descuento() {
+  int Opc_Dsc = 0;
   
+  for (int i = 0; i < 3; i++) {
+    cout << i+1 << "= Descuento " << i + 1 << " : " << Configuracion_de_Tienda[i] << endl;
+  }
+  
+  cout << "\nIndique el Descuento a modificar: ";
+  cin >> Opc_Dsc;
+  
+  if (Opc_Dsc > 0 && Opc_Dsc < 4) {
+    cout << "\nIndique el nuevo Descuento: ";
+    cin >> Configuracion_de_Tienda[Opc_Dsc-1];
+  }
+  else {
+    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
+    return Configurar_Descuento();
+  }
+}
+
 /*============REPORTES==============*/
 
-void Reportes_Ventas_relacion_a_venta_optima() {
-  
-  cout << "VENTAS EN RELACIÓN A LA VENTA OPTIMA" << endl << endl;
-  //ifstream Cantidad_optima;
-  //Cantidad_optima.open("config-tienda.txt");
+void Mostrar_Ventas_en_Relacion_a_la_Venta_Optima() {
+
+  cout << "VENTAS EN RELACIÓN A LA VENTA ÓPTIMA" << endl << endl;
 
   for (int i = 0; i < 5; i++) {
     cout << "Modelo             :  " << Cocinas[i][0] << endl;
-    cout << "Unidades vendidas  :  " << Vec_T_unidades[i] << " (";
+    cout << "Unidades vendidas  :  " << Cantidad_de_Unidades_Vendidas[i] << " (";
     
-    if (Configuracion_tienda[3] > Vec_T_unidades[i]) {
-      cout << Configuracion_tienda[3] - Vec_T_unidades[i] << " mas";
+    if (Configuracion_de_Tienda[3] > Cantidad_de_Unidades_Vendidas[i]) {
+      cout << Configuracion_de_Tienda[3] - Cantidad_de_Unidades_Vendidas[i] << " mas";
     }
-    else if (Configuracion_tienda[3] < Vec_T_unidades[i]) {
-      cout << Configuracion_tienda[3] - Vec_T_unidades[i] << " menos";
+    else if (Configuracion_de_Tienda[3] < Cantidad_de_Unidades_Vendidas[i]) {
+      cout << Configuracion_de_Tienda[3] - Cantidad_de_Unidades_Vendidas[i] << " menos";
     }
-    else if (Configuracion_tienda[3] == Vec_T_unidades[i]){
+    else if (Configuracion_de_Tienda[3] == Cantidad_de_Unidades_Vendidas[i]){
       cout << " igual";
     } 
     cout << " que la cantidad optima)" << endl << endl;
   }
-
-  
 }
 
-void Reportes_Ventas_por_modelo() {
-cout << "VENTAS POR MODELO" << endl << endl;
-for (int i = 0; i < 5; i++){
+void Mostrar_Ventas_por_Modelo() {
+  
+  cout << "VENTAS POR MODELO" << endl << endl;
+  
+  for (int i = 0; i < 5; i++) {
   cout << "Modelo                         :  " << Cocinas[i][0] << endl;
-  cout << "Cantidad de ventas             :  " << cant_ventas[i] << endl;
-  cout << "Cantidad de unidades vendidas  :  " << Vec_T_unidades[i] << endl;
-  cout << "Importe total vendido          :  " << Importe_t_pagar[i] << endl << endl;
+  cout << "Cantidad de ventas             :  " << Cantidad_de_Ventas[i] << endl;
+  cout << "Cantidad de unidades vendidas  :  " << Cantidad_de_Unidades_Vendidas[i] << endl;
+  cout << "Importe total vendido          :  " << Importe_Total_Vendido[i] << endl << endl;
+  }
 }
-
-  
-}
-
-
-  
+ 
 /*============VENDER================*/
 
-void VENDER(int Nr_Cocina, int Total_U_Vendidas[5]) {
-  int cant_vent = 0;
-  float importe_compras, importe_pagar, x, descuento;
-  string num_str1(to_string(N_Boleto));
-  ofstream boletas;
+void Vender_Cocina(int Indice_de_Cocina) {
+  int CantCocinas_a_Comprar = 0;
+  float Importe_de_Compra, Importe_Final, Precio, Descuento;
+  string NBoleto(to_string(Numero_de_Boleto));
+  ofstream Boletas;
   
   cout << "Elija la cantidad de cocinas a comprar: ";
-  cin >> cant_vent;
+  cin >> CantCocinas_a_Comprar;
   
-  Total_U_Vendidas[Nr_Cocina]  = cant_vent +  Total_U_Vendidas[Nr_Cocina];
+  Importe_Total_Vendido[Indice_de_Cocina]  += CantCocinas_a_Comprar;   //xd
   
-  x = stof(Cocinas[Nr_Cocina][1]);
-  importe_compras = cant_vent * x;
+  Precio = stof(Cocinas[Indice_de_Cocina][1]);
+  Importe_de_Compra = CantCocinas_a_Comprar * Precio;
 
-  if (cant_vent >= 1 && cant_vent < 6) {
-    descuento = importe_compras * (Configuracion_tienda[0]/100);
+  if (CantCocinas_a_Comprar >= 1 && CantCocinas_a_Comprar < 6) {
+    Descuento = Importe_de_Compra * (Configuracion_de_Tienda[0]/100);
   }
-  else if (cant_vent > 5 && cant_vent < 11) {
-    descuento = importe_compras * (Configuracion_tienda[1]/100);
+    
+  else if (CantCocinas_a_Comprar > 5 && CantCocinas_a_Comprar < 11) {
+    Descuento = Importe_de_Compra * (Configuracion_de_Tienda[1]/100);
   }
-  else if (cant_vent > 9) {
-    descuento = importe_compras * (Configuracion_tienda[2]/100);
+    
+  else if (CantCocinas_a_Comprar > 9) {
+    Descuento = Importe_de_Compra * (Configuracion_de_Tienda[2]/100);
   }
+    
    else {
-    cout << "Revise que la cantidad sea positiva y un entero" << endl;
-     
+    cout << "Revise que la cantidad sea un entero positivo" << endl;
    }
-  importe_pagar = importe_compras - descuento;
-  Importe_t_pagar[Nr_Cocina] = importe_pagar + Importe_t_pagar[Nr_Cocina];
   
-  boletas.open("boleta_<" + num_str1 + ">.txt");
+  Importe_Final = Importe_de_Compra - Descuento;
+  Importe_Total_Vendido[Indice_de_Cocina] = Importe_Final + Importe_Total_Vendido[Indice_de_Cocina];
   
-  if (boletas.is_open()) {
-    boletas << "BOLETA DE VENTA: " << N_Boleto << endl << endl;
-    boletas << "Modelo         : " << Cocinas[Nr_Cocina][0] << endl;
-    boletas << "Precio         : " << "S/ " << Cocinas[Nr_Cocina][1] << endl;
-    boletas << "Cantidad       : " << cant_vent << endl;
-    boletas << "Importe compra : " << "S/ " << importe_compras << endl;
-    boletas << "Descuento      : " << "S/ " << descuento << endl;
-    boletas << "Importe pagar  : " << "S/ " << importe_pagar << endl;
+  Boletas.open("boleta_<" + NBoleto + ">.txt");
+  
+  if (Boletas.is_open()) {
+    Boletas << "BOLETA DE VENTA: " << Numero_de_Boleto << endl << endl;
+    Boletas << "Modelo         : " << Cocinas[Indice_de_Cocina][0] << endl;
+    Boletas << "Precio         : " << "S/ " << Cocinas[Indice_de_Cocina][1] << endl;
+    Boletas << "Cantidad       : " << CantCocinas_a_Comprar << endl;
+    Boletas << "Importe compra : " << "S/ " << Importe_de_Compra << endl;
+    Boletas << "Descuento      : " << "S/ " << Descuento << endl;
+    Boletas << "Importe pagar  : " << "S/ " << Importe_Final << endl;
         
-    boletas.close();
-        
-    }
-  N_Boleto ++;
-  
+    Boletas.close();   
+  }
+  Numero_de_Boleto ++;
 }
 
-void Vender_Cocina() {
-  int opcion_Cons, *Pcan_Ventas;
+void Mostrar_Vender_Cocina() {
+  int Opc_VCocina;
+
   cout << "¿Qué modelo desea comprar?\n";
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n";
   cout << "Elija la opcion: ";
-  cin >> opcion_Cons;
-  cout << endl;
+  cin >> Opc_VCocina;
   
-  switch(opcion_Cons){
+  switch(Opc_VCocina){
     case 1: cout << "Cocina 1:\n\n";
-      VENDER(opcion_Cons-1, &Vec_T_unidades[0]);
-      cant_ventas[0]++;
+      Vender_Cocina(Opc_VCocina-1);
+      Cantidad_de_Ventas[0]++;
     break;
     case 2: cout << "Cocina 2:\n\n";
-      VENDER(opcion_Cons-1, &Vec_T_unidades[1]);
-      cant_ventas[1]++;
+      Vender_Cocina(Opc_VCocina-1);
+      Cantidad_de_Ventas[1]++;
     break;
     case 3: cout << "Cocina 3:\n\n";
-      VENDER(opcion_Cons-1, &Vec_T_unidades[2]);
-      cant_ventas[2]++;
+      Vender_Cocina(Opc_VCocina-1);
+      Cantidad_de_Ventas[2]++;
     break;
     case 4: cout << "Cocina 4:\n\n";
-      VENDER(opcion_Cons-1, &Vec_T_unidades[3]);
-      cant_ventas[3]++;
+      Vender_Cocina(Opc_VCocina-1);
+      Cantidad_de_Ventas[3]++;
     break;
     case 5: cout << "Cocina 5:\n\n";
-      VENDER(opcion_Cons-1, &Vec_T_unidades[4]);
-      cant_ventas[4]++;
+      Vender_Cocina(Opc_VCocina-1);
+      Cantidad_de_Ventas[4]++;
     break;
   } 
 }
 
-
-
-
-
 /*============MANTENIMIENTO==========*/
 
-void Opcion_Modificar_Cocina(int x) {
-  int b;
-  int a;
-  int opcion;
+void Modificar_Cocina(int Indice_Cocina) {
+  int Opc_ModificarC;
   cout << "\n ¿Desea modificar por partes o todo?" << endl;
   cout << "\n 1.- Por partes ";
   cout << "\n 2.- Todo ";
   cout << "\n 3.- N/A\n";
-  cin >> a;
-  if(a == 1){
+  cin >> Opc_ModificarC;
+  if(Opc_ModificarC == 1){
+    int Opc_PorPartes;
+    
+    cout << "\n 1.- Por partes " << endl;
     cout << "Elija que deseea moficar:\n1 = PRECIO\n2 = ALTO\n3 = ANCHO\n4 = FONDO\n5 = QUEMDORES\n";
-    cin >> opcion;
+    cin >> Opc_PorPartes;
     cout << endl;
-    switch (opcion){
+    switch (Opc_PorPartes){
       case 1:
         cout << "Indique el nuevo precio\n";
-        cin >> Cocinas[x][1];
-      break;
+        cin >> Cocinas[Indice_Cocina][1];
+        break;
       case 2:
         cout << "Indique el alto\n";
-        cin >> Cocinas[x][2];
-      break;
+        cin >> Cocinas[Indice_Cocina][2];
+        break;
       case 3:
         cout << "Indique el nuevo ancho\n";
-        cin >> Cocinas[x][3];
-      break;
+        cin >> Cocinas[Indice_Cocina][3];
+        break;
       case 4:
         cout << "Indique el nuevo fondo\n";
-        cin >> Cocinas[x][4];
-      break;
+        cin >> Cocinas[Indice_Cocina][4];
+        break;
       case 5:
         cout << "Indique catidad de quemadores\n";
-        cin >> Cocinas[x][5];
-      break;
+        cin >> Cocinas[Indice_Cocina][5];
+        break;
+      
       default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
-    break;
+        break;
     }
   }
-  else if(a==2){
+  else if(Opc_ModificarC == 2) {
     cout << "\nIndique el nuevo precio\n";
-    cin >> Cocinas[x][1];
+    cin >> Cocinas[Indice_Cocina][1];
     cout << "Indique el alto\n";
-    cin >> Cocinas[x][2];
+    cin >> Cocinas[Indice_Cocina][2];
     cout << "Indique el nuevo fondo\n";
-    cin >> Cocinas[x][3];
+    cin >> Cocinas[Indice_Cocina][3];
     cout << "Indique el nuevo fondo\n";
-    cin >> Cocinas[x][4];
+    cin >> Cocinas[Indice_Cocina][4];
     cout << "Indique catidad de quemadores\n";
-    cin >> Cocinas[x][5];
-  }
-  else if(a==3){
-    
-  }
-
-  cout << "¿Esta correcto?\n";
-  for (int j = 1; j < 6; j++) {
-    cout << indice[j] <<  Cocinas[x][j] << endl;
-  }
-  cout << "\n 1.- SI ";
-  cout << "\n 2.- NO\n";
-  cin >> b;
-  cout << "\n";
-  if(b==2){
-  
-  }
-
-  cout << "\n ¿Desea Volver a modificar?" << endl;
-  cout << "\n 1.- SI ";
-  cout << "\n 2.- NO\n";
-  cin >> b;
-  cout << "\n";
-  if(b==1){
-    return Opcion_Modificar_Cocina(x);
+    cin >> Cocinas[Indice_Cocina][5];
   }
   else {
-    
+    return Modificar_Cocina(Indice_Cocina);
   }
 }
 
-void Modificar_Cocina () {
-  int opcion_mod;
-  int b;
-  cout<< "Elija cocina a modificar\n1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
+void Mostrar_Modificar_Cocina () {
+  int Opc_Modificar;
+  cout<< "Elija cocina a modificar\n";
+  cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
   cout << "Elija la opcion\n";
-  cin >> opcion_mod;
-  cout << "\n";
-    switch(opcion_mod){
-      case 1: 
-      Opcion_Modificar_Cocina(0);
+  cin >> Opc_Modificar;
+  switch(Opc_Modificar){
+    case 1:
+      Modificar_Cocina(0);
       break;
-      case 2: 
-      Opcion_Modificar_Cocina(1);
+    case 2: 
+      Modificar_Cocina(1);
       break;
-      case 3: 
-      Opcion_Modificar_Cocina(2);
+    case 3: 
+      Modificar_Cocina(2);
       break;
-      case 4: 
-      Opcion_Modificar_Cocina(3);
+    case 4: 
+      Modificar_Cocina(3);
       break;
-      case 5:  
-      Opcion_Modificar_Cocina(4);
-       break;
+    case 5:  
+      Modificar_Cocina(4);
+      break;
   } 
 }
 
-void Lista_de_Cocinas () {
-  fstream Lista_Cocinas;
-  Lista_Cocinas.open("cocina-data.txt",ios::in);
-  if(Lista_Cocinas.is_open()) {
-    string tp;
-    int cont = 1;
-    int cont1 = 0;
-    while (getline(Lista_Cocinas, tp)) {       
-      if (cont1 < 6) {
-      cout << indice[cont1];
-      cont1++;
-      }
-      cout << tp << "\n";
-      cont ++;
-      if (cont > 6) {
-        cout << "============================\n";
-        cont = 1;
-        cont1 = 0;
-      }
-    } 
-  Lista_Cocinas.close();
+void Mostrar_Lista_de_Cocinas () {
+  cout << "LISTADO DE COCINAS" << endl << endl;
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 6; j++) {
+      cout << Indice_de_Cocina[j] << Cocinas[i][j] << endl;
+    }
+    cout << endl << endl;
   }
 }
 
 void Consultar_Cocina () {
-  int opcion_Cons;
+  int Opc_ConsC;
+  
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n";
   cout << "Elija la opcion: ";
-  cin >> opcion_Cons;
-  cout << "\n";
+  cin >> Opc_ConsC;
   
-  switch(opcion_Cons){
+  switch(Opc_ConsC){
     case 1: cout << "Cocina 1:\n\n";
-    DESCRIBE(0);
-    break;
+      Describir_Cocina(0);
+      break;
     case 2: cout << "Cocina 2:\n\n";
-    DESCRIBE(1);
-    break;
+      Describir_Cocina(1);
+      break;
     case 3: cout << "Cocina 3:\n\n";
-    DESCRIBE(2);
-    break;
+      Describir_Cocina(2);
+      break;
     case 4: cout << "Cocina 4:\n\n";
-    DESCRIBE(3);
-    break;
+      Describir_Cocina(3);
+      break;
     case 5: cout << "Cocina 5:\n\n";
-    DESCRIBE(4);
-    break;
+      Describir_Cocina(4);
+      break;
   } 
 }
 
 void Mostrar_Mantenimiento () {
-  
-  int opcion_Mant;
-  indice[0] = "MODELO     : ";
-  indice[1] = "PRECIO     : ";
-  indice[2] = "ALTO       : ";
-  indice[3] = "ANCHO      : "; 
-  indice[4] = "FONDO      : ";
-  indice[5] = "QUEMADORES : ";
-  
+  int Opc_Mante;
+  Indice_de_Cocina[0] = "MODELO     : ";
+  Indice_de_Cocina[1] = "PRECIO     : S/ ";
+  Indice_de_Cocina[2] = "ALTO       : ";
+  Indice_de_Cocina[3] = "ANCHO      : "; 
+  Indice_de_Cocina[4] = "FONDO      : ";
+  Indice_de_Cocina[5] = "QUEMADORES : ";
   
   cout << "1 = Cosultar Cocina\n2 = Modificar Cocina\n3 = Lista de Cocinas\n";
   cout << "Elija la opción: ";
-  cin >> opcion_Mant;
-  cout << "\n";
+  cin >> Opc_Mante;
   
-    switch(opcion_Mant) {
+    switch(Opc_Mante) {
       case 1: cout << "Cosultar Cocina\n";
-      Consultar_Cocina();
-      break;
+        Consultar_Cocina();
+        break;
       case 2: cout << "Modificar Cocina\n";
-      Modificar_Cocina ();
-      break;
+        Mostrar_Modificar_Cocina ();
+        break;
       case 3: cout << "\tLista de Cocinas: \n";
-      cout<<"============================\n";
-      Lista_de_Cocinas();
-      break;
+        cout << endl;
+        Mostrar_Lista_de_Cocinas();
+        break;
     }
 }
 
-/*===================================*/
+/*================MENU===================*/
+
 void Mostrar_Menu () {
-  int opcion;
+  int Opc_Menu;
   
   cout << "\tTIENDITA DE DON PEPE" << endl;
+  
   cout << "MENU: " << endl;
   cout << "1 = Mantenimiento\n2 = Vender\n3 = Reportes\n4 = Configuración\n5 = Salir\n";
-  
   cout << "Elija la opción: ";
-  cin >> opcion;
+  cin >> Opc_Menu;
   cout << endl;
   
-  switch (opcion) {
+  switch (Opc_Menu) {
     case 1: cout << "\nMANTENIMIENTO:" << endl;
       Mostrar_Mantenimiento ();
-    break;
+      break;
     case 2: cout << "\nVENDER" << endl;
-      Vender_Cocina();
-    break;
+      Mostrar_Vender_Cocina();
+      break;
     case 3: cout << "\nREPORTES:" << endl;
       int Opc_Reportes;
       cout << "1=Ventas por modelo\n2=Ventas en relación a la venta óptima\n";
@@ -427,23 +383,24 @@ void Mostrar_Menu () {
       cin >> Opc_Reportes;
       cout << endl;
       switch (Opc_Reportes) {
-        case 1: Reportes_Ventas_por_modelo();
-        break;
-        case 2: Reportes_Ventas_relacion_a_venta_optima();
-        break;
-      }
+        case 1: Mostrar_Ventas_por_Modelo();
+          break;
+        case 2: Mostrar_Ventas_en_Relacion_a_la_Venta_Optima();
+          break;
+        }
     break;
     case 4: cout << "\nCONFIGURACIÓN:" << endl;
-     int Opc_Configuracion;
-      cout << "1=Cofigurar_descuentos\n2=Cofigurar_cantidad_optima\n";
+      int Opc_Configuracion;
+      cout << "1=Cofigurar_Descuentos\n2=Cofigurar_cantidad_optima\n";
       cout << "Elija la opción: ";
       cin >> Opc_Configuracion;
       cout << endl;
+      
       switch (Opc_Configuracion) {
-        case 1: Configurar_descuentos();
-        break;
-        case 2: Cofigurar_cantidad_optima();
-        break;
+        case 1: Configurar_Descuento();
+          break;
+        case 2: Configurar_Cantidad_Optima();
+          break;
       }
     break;
     case 5: cout << "\nSALIR:" << endl;
@@ -453,11 +410,11 @@ void Mostrar_Menu () {
         cout << "\n 2.- NO\n";
         cin >> Opc_Salir;
         cout << "\n";
-        if(Opc_Salir ==1){ 
+        if(Opc_Salir ==1) { 
             cout << "\nHasta luego, vuelva pronto ;)";
            exit(0);        
         }
-        else if(Opc_Salir == 2){
+        else if(Opc_Salir == 2) {
           return Mostrar_Menu();
         }
         else {
@@ -468,7 +425,7 @@ void Mostrar_Menu () {
   }
 }
 
-
+/*==============PRINCIPAL===============*/
 
 int main() {
 
