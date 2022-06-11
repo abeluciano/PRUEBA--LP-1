@@ -188,7 +188,6 @@ void Mostrar_Vender_Cocina() {
   cout << "Elija la opcion: ";
   cin >> Opc_VCocina;
 
-  if(Opc_VCocina > 0 && Opc_VCocina < 6) {
     switch(Opc_VCocina){
       case 1: cout << "Cocina 1:\n\n";
         Vender_Cocina(Opc_VCocina-1);
@@ -210,13 +209,11 @@ void Mostrar_Vender_Cocina() {
         Vender_Cocina(Opc_VCocina-1);
         Cantidad_de_Ventas[4]++;
         break;
+      default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+        break;
     } 
-  }
-  else {
-    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
-    return Mostrar_Vender_Cocina();
-  }
 }
+
 
 /*============MANTENIMIENTO==========*/
 
@@ -282,7 +279,6 @@ void Mostrar_Modificar_Cocina () {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
   cout << "Elija la opcion\n";
   cin >> Opc_Modificar;
-  if(Opc_Modificar > 0 && Opc_Modificar < 6) {
     switch(Opc_Modificar){
       case 1:
         Modificar_Cocina(0);
@@ -299,12 +295,9 @@ void Mostrar_Modificar_Cocina () {
       case 5:  
         Modificar_Cocina(4);
         break;
+      default: cout << "ERROR MI CAUSITA, QUE PASA AH" << endl;
+        break;
     } 
-  }
-  else {
-    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
-    return Mostrar_Vender_Cocina();
-  }
 }
 
 void Mostrar_Lista_de_Cocinas () {
