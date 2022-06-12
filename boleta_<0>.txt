@@ -1,0 +1,8 @@
+BOLETA DE VENTA: 0
+
+Modelo         : Coldex CX602
+Precio         : S/ 629.0
+Cantidad       : 5
+Importe compra : S/ 3145
+Descuento      : S/ 235.875
+Importe pagar  : S/ 2909.12

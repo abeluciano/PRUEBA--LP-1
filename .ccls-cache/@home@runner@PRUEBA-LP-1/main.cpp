@@ -53,7 +53,13 @@ void Describir_Cocina(int NumCocina) {
     cout << Indice_de_Cocina[j] << Cocinas[NumCocina][j] << endl;
   }
 }
-
+/*==========ERROR_DEL_CIN(BUCLE)==========*/
+void Error_cin() {
+  if (! cin) {                              
+    cin.clear();                          
+    cin.ignore(10000,'\n');; // para evitar bucles 
+  }
+}
 /*==========MENSAJE_DE_ERROR==========*/
 
 void Mostrar_Mensaje_de_Error() {
@@ -83,7 +89,7 @@ void Configurar_Descuento() {
   
   cout << "\nIndique el Descuento a modificar: ";
   cin >> Opc_Dsc;
-  
+  Error_cin();
   if (Opc_Dsc > 0 && Opc_Dsc < 4) {
     cout << "\nIndique el nuevo Descuento: ";
     cin >> Configuracion_de_Tienda[Opc_Dsc-1];
@@ -99,7 +105,7 @@ void Mostrar_Configuracion() {
   cout << "1=Cofigurar_Descuentos\n2=Cofigurar_cantidad_optima\n";
   cout << "Elija la opción: ";
   cin >> Opc_Configuracion;
-  cout << endl;    
+  Error_cin();
   switch (Opc_Configuracion) {
     case 1: Configurar_Descuento();
       break;
@@ -150,7 +156,7 @@ void Mostrar_Reportes() {
   cout << "1 = Ventas por modelo\n2 = Ventas en relación a la venta óptima\n";
   cout << "Elija la opción: ";
   cin >> Opc_Reportes;
-  cout << endl;
+  Error_cin();
   switch (Opc_Reportes) {
     case 1: Mostrar_Ventas_por_Modelo();
       break;
@@ -226,7 +232,7 @@ void Mostrar_Vender_Cocina() {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n";
   cout << "Elija la opcion: ";
   cin >> Opc_VCocina;
-
+  Error_cin();
     switch(Opc_VCocina){
       case 1: cout << "Cocina 1:\n\n";
         Vender_Cocina(Opc_VCocina-1);
@@ -270,7 +276,7 @@ void Modificar_Cocina(int Indice_Cocina) {
     cout << "\n 1.- Por partes " << endl;
     cout << "Elija que deseea moficar:\n1 = PRECIO\n2 = ALTO\n3 = ANCHO\n4 = FONDO\n5 = QUEMDORES\n";
     cin >> Opc_PorPartes;
-    cout << endl;
+    Error_cin();
     switch (Opc_PorPartes){
       case 1:
         cout << "Indique el nuevo precio\n";
@@ -320,6 +326,7 @@ void Mostrar_Modificar_Cocina () {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n ";
   cout << "Elija la opcion\n";
   cin >> Opc_Modificar;
+  Error_cin();
   switch(Opc_Modificar){
     case 1:
       Modificar_Cocina(0);
@@ -363,7 +370,7 @@ void Consultar_Cocina () {
   cout << "1 = Mabe EMP6120PG0\n2 = Indurama Parma\n3 = Sole COSOL027\n4 = Coldex CX602\n5 = Reco Dakota\n";
   cout << "Elija la opcion: ";
   cin >> Opc_ConsC;
-  
+  Error_cin();
   switch(Opc_ConsC){
     case 1: cout << "Cocina 1:\n\n";
       Describir_Cocina(0);
@@ -398,7 +405,7 @@ void Mostrar_Mantenimiento () {
   cout << "1 = Cosultar Cocina\n2 = Modificar Cocina\n3 = Lista de Cocinas\n";
   cout << "Elija la opción: ";
   cin >> Opc_Mante;
-  
+  Error_cin();
   switch(Opc_Mante) {
     case 1: cout << "\nCONSULTAR COCINA:\n\n";
       Consultar_Cocina();
@@ -416,17 +423,17 @@ void Mostrar_Mantenimiento () {
 }
 
 /*================MENU===================*/
-
+int Opc_Menu;
 void Mostrar_Menu () {
-  int Opc_Menu;
-  
+
   cout << "\t\nLA TIENDITA DE DON PEPE\n\n";
   
   cout << "MENU\n\n";
   cout << "1 = Mantenimiento\n2 = Vender\n3 = Reportes\n4 = Configuración\n5 = Salir\n";
   cout << "Elija la opción: ";
   cin >> Opc_Menu;
-  
+  Error_cin();
+
   switch (Opc_Menu) {
     case 1: cout << "\nMANTENIMIENTO:\n\n";
       Mostrar_Mantenimiento ();
