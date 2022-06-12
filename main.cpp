@@ -1,7 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <string.h>
 
 using namespace std;
 
@@ -123,15 +121,15 @@ void Mostrar_Ventas_en_Relacion_a_la_Venta_Optima() {
     cout << "Unidades vendidas  :  " << Cantidad_de_Unidades_Vendidas[i] << " (";
     
     if (Configuracion_de_Tienda[3] > Cantidad_de_Unidades_Vendidas[i]) {
-      cout << Configuracion_de_Tienda[3] - Cantidad_de_Unidades_Vendidas[i] << " mas";
+      cout << (Cantidad_de_Unidades_Vendidas[i] - Configuracion_de_Tienda[3]) * (-1) << " menos";
     }
     else if (Configuracion_de_Tienda[3] < Cantidad_de_Unidades_Vendidas[i]) {
-      cout << Configuracion_de_Tienda[3] - Cantidad_de_Unidades_Vendidas[i] << " menos";
+      cout << Cantidad_de_Unidades_Vendidas[i] - Configuracion_de_Tienda[3] << " más";
     }
-    else if (Configuracion_de_Tienda[3] == Cantidad_de_Unidades_Vendidas[i]){
-      cout << " igual";
+    else if (Configuracion_de_Tienda[3] == Cantidad_de_Unidades_Vendidas[i]) {
+      cout << "igual";
     } 
-    cout << " que la cantidad optima)" << endl << endl;
+    cout << " que la cantidad óptima)" << endl << endl;
   }
 }
 
@@ -163,6 +161,7 @@ void Mostrar_Reportes() {
       break;
   }
 }
+
 /*============VENDER================*/
 
 void Vender_Cocina(int Indice_de_Cocina) {
@@ -347,12 +346,15 @@ void Mostrar_Modificar_Cocina () {
 void Mostrar_Lista_de_Cocinas () {
   
   for (int i = 0; i < 5; i++) {
-    cout << "============================" << endl;
+    cout << "\n============================";
     for (int j = 0; j < 6; j++) {
-      cout << Indice_de_Cocina[j] << Cocinas[i][j] << endl;
+      cout << endl << Indice_de_Cocina[j] << Cocinas[i][j];
+      if (j > 1 && j < 5) {
+        cout << " cm";
+      }
     }
   }
-  cout << "============================" << endl;
+  cout << "\n============================\n";
 }
 
 void Consultar_Cocina () {
