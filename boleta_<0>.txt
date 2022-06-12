@@ -1,0 +1,8 @@
+BOLETA DE VENTA: 0
+
+Modelo         : Sole COSOL027
+Precio         : S/ 10
+Cantidad       : 20
+Importe compra : S/ 200
+Descuento      : S/ 25
+Importe pagar  : S/ 175

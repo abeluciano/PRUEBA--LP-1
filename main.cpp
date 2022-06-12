@@ -56,6 +56,11 @@ void Describir_Cocina(int NumCocina) {
   }
 }
 
+/*==========MENSAJE_DE_ERROR==========*/
+
+void Mostrar_Mensaje_de_Error() {
+  cout << "\nError, la opción elegida no exite. Vuelve a intentarlo...\n\n";
+}
 /* ==========CONFIGURACIÓN========== */
 
 void Configurar_Cantidad_Optima() {
@@ -66,7 +71,7 @@ void Configurar_Cantidad_Optima() {
     cin >> Configuracion_de_Tienda[3];
   }
   else {
-    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
+    Mostrar_Mensaje_de_Error();
     return Configurar_Cantidad_Optima();
   }
 }
@@ -86,16 +91,32 @@ void Configurar_Descuento() {
     cin >> Configuracion_de_Tienda[Opc_Dsc-1];
   }
   else {
-    cout << "Error, la opcion elegida es incorrecta. Vuelva a elegir" << endl << endl;
+    Mostrar_Mensaje_de_Error();
     return Configurar_Descuento();
   }
 }
 
+void Mostrar_Configuracion() {
+  int Opc_Configuracion;
+  cout << "1=Cofigurar_Descuentos\n2=Cofigurar_cantidad_optima\n";
+  cout << "Elija la opción: ";
+  cin >> Opc_Configuracion;
+  cout << endl;    
+  switch (Opc_Configuracion) {
+    case 1: Configurar_Descuento();
+      break;
+    case 2: Configurar_Cantidad_Optima();
+      break;
+    default: Mostrar_Mensaje_de_Error(); 
+      return Mostrar_Configuracion();
+      break;
+  }
+}
 /*============REPORTES==============*/
 
 void Mostrar_Ventas_en_Relacion_a_la_Venta_Optima() {
 
-  cout << "\tVENTAS EN RELACIÓN A LA VENTA ÓPTIMA" << endl << endl;
+  cout << "VENTAS EN RELACIÓN A LA VENTA ÓPTIMA\n\n";
 
   for (int i = 0; i < 5; i++) {
     cout << "Modelo             :  " << Cocinas[i][0] << endl;
@@ -125,7 +146,23 @@ void Mostrar_Ventas_por_Modelo() {
     cout << "Importe total vendido          :  " << Importe_Total_Vendido[i] << endl << endl;
   }
 }
- 
+
+void Mostrar_Reportes() {
+  int Opc_Reportes;
+  cout << "1 = Ventas por modelo\n2 = Ventas en relación a la venta óptima\n";
+  cout << "Elija la opción: ";
+  cin >> Opc_Reportes;
+  cout << endl;
+  switch (Opc_Reportes) {
+    case 1: Mostrar_Ventas_por_Modelo();
+      break;
+    case 2: Mostrar_Ventas_en_Relacion_a_la_Venta_Optima();
+      break;
+    default: Mostrar_Mensaje_de_Error(); 
+      return Mostrar_Reportes();
+      break;
+  }
+}
 /*============VENDER================*/
 
 void Vender_Cocina(int Indice_de_Cocina) {
@@ -136,11 +173,13 @@ void Vender_Cocina(int Indice_de_Cocina) {
   
   cout << "Elija la cantidad de cocinas a comprar: ";
   cin >> CantCocinas_a_Comprar;
-  
-  Importe_Total_Vendido[Indice_de_Cocina]  += CantCocinas_a_Comprar;
+
+  Cantidad_de_Unidades_Vendidas[Indice_de_Cocina] += CantCocinas_a_Comprar;
   
   Precio = stof(Cocinas[Indice_de_Cocina][1]);
+  
   Importe_de_Compra = CantCocinas_a_Comprar * Precio;
+
 
   if (CantCocinas_a_Comprar >= 1 && CantCocinas_a_Comprar < 6) {
     Descuento = Importe_de_Compra * (Configuracion_de_Tienda[0]/100);
@@ -156,9 +195,10 @@ void Vender_Cocina(int Indice_de_Cocina) {
     
   else {
     cout << "Revise que la cantidad sea un entero positivo" << endl;
-   }
+  }
   
   Importe_Final = Importe_de_Compra - Descuento;
+  
   Importe_Total_Vendido[Indice_de_Cocina] += Importe_Final;
   
   Boletas.open("boleta_<" + NBoleto + ">.txt");
@@ -209,7 +249,7 @@ void Mostrar_Vender_Cocina() {
         Vender_Cocina(Opc_VCocina-1);
         Cantidad_de_Ventas[4]++;
         break;
-      default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl;
+      default: Mostrar_Mensaje_de_Error();
         return Mostrar_Vender_Cocina();
         break;
     } 
@@ -253,7 +293,7 @@ void Modificar_Cocina(int Indice_Cocina) {
         cout << "Indique catidad de quemadores\n";
         cin >> Cocinas[Indice_Cocina][5];
         break;
-      default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl; 
+      default: Mostrar_Mensaje_de_Error();
         return Modificar_Cocina(Indice_Cocina);
         break;
     }
@@ -297,21 +337,22 @@ void Mostrar_Modificar_Cocina () {
     case 5:  
       Modificar_Cocina(4);
       break;
-    default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl;  
+    default:
+      Mostrar_Mensaje_de_Error();
       return Mostrar_Modificar_Cocina ();
         break;
     } 
 }
 
 void Mostrar_Lista_de_Cocinas () {
-  cout << "\tLISTADO DE COCINAS" << endl << endl;
+  
   for (int i = 0; i < 5; i++) {
-    cout << "============================================" << endl;
+    cout << "============================" << endl;
     for (int j = 0; j < 6; j++) {
       cout << Indice_de_Cocina[j] << Cocinas[i][j] << endl;
     }
-    cout << endl << endl;
   }
+  cout << "============================" << endl;
 }
 
 void Consultar_Cocina () {
@@ -337,7 +378,7 @@ void Consultar_Cocina () {
     case 5: cout << "Cocina 5:\n\n";
       Describir_Cocina(4);
       break;
-    default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl;
+    default: Mostrar_Mensaje_de_Error();
       return Consultar_Cocina ();
       break;
   } 
@@ -357,16 +398,16 @@ void Mostrar_Mantenimiento () {
   cin >> Opc_Mante;
   
   switch(Opc_Mante) {
-    case 1: cout << "Cosultar Cocina\n";
+    case 1: cout << "\nCONSULTAR COCINA:\n\n";
       Consultar_Cocina();
       break;
-    case 2: cout << "Modificar Cocina\n";
+    case 2: cout << "\nMODIFICAR COCINA:\n\n";
       Mostrar_Modificar_Cocina ();
       break;
-    case 3: cout << "\tLista de Cocinas: \n";
+    case 3: cout << "\nLISTA DE COCINAS:\n\n";
       Mostrar_Lista_de_Cocinas();
       break;
-    default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl;
+    default: Mostrar_Mensaje_de_Error();
       return Mostrar_Mantenimiento ();
       break;
     }
@@ -377,73 +418,56 @@ void Mostrar_Mantenimiento () {
 void Mostrar_Menu () {
   int Opc_Menu;
   
-  cout << "\tLA TIENDITA DE DON PEPE" << endl << endl;
+  cout << "\t\nLA TIENDITA DE DON PEPE\n\n";
   
-  cout << "MENU: " << endl;
+  cout << "MENU\n\n";
   cout << "1 = Mantenimiento\n2 = Vender\n3 = Reportes\n4 = Configuración\n5 = Salir\n";
   cout << "Elija la opción: ";
   cin >> Opc_Menu;
-  cout << endl;
   
   switch (Opc_Menu) {
-    case 1: cout << "\nMANTENIMIENTO:" << endl;
+    case 1: cout << "\nMANTENIMIENTO:\n\n";
       Mostrar_Mantenimiento ();
-      break;
-    case 2: cout << "\nVENDER" << endl;
-      Mostrar_Vender_Cocina();
-      break;
-    case 3: cout << "\nREPORTES:" << endl;
-      int Opc_Reportes;
-      cout << "1=Ventas por modelo\n2=Ventas en relación a la venta óptima\n";
-      cout << "Elija la opción: ";
-      cin >> Opc_Reportes;
-      cout << endl;
-      switch (Opc_Reportes) {
-        case 1: Mostrar_Ventas_por_Modelo();
-          break;
-        case 2: Mostrar_Ventas_en_Relacion_a_la_Venta_Optima();
-          break;
-        }
-    break;
-    case 4: cout << "\nCONFIGURACIÓN:" << endl;
-      int Opc_Configuracion;
-      cout << "1=Cofigurar_Descuentos\n2=Cofigurar_cantidad_optima\n";
-      cout << "Elija la opción: ";
-      cin >> Opc_Configuracion;
-      cout << endl;
-      
-      switch (Opc_Configuracion) {
-        case 1: Configurar_Descuento();
-          break;
-        case 2: Configurar_Cantidad_Optima();
-          break;
-      }
-    break;
-    case 5: cout << "\nSALIR:" << endl;
-      int Opc_Salir;
-      cout << "¿Esta usted seguro de salir?\n";
-        cout << "\n 1.- SI ";
-        cout << "\n 2.- NO\n";
-        cin >> Opc_Salir;
-        cout << "\n";
-        if(Opc_Salir ==1) { 
-            cout << "\nHasta luego, vuelva pronto ;)";
-           exit(0);        
-        }
-        else if(Opc_Salir == 2) {
-          return Mostrar_Menu();
-        }
-        else {
-          cout << "La opcion marcada no existe, volviendo al Menú..." << endl << endl;
-          return Mostrar_Menu();
-        }
-    break;
-    default: cout << "Error, la opción elegida no exite. Vuelve a intentarlo..." << endl << endl;
+      cout << "\nVolviendo al menu...\n";
       return Mostrar_Menu ();
       break;
-  }
+    case 2: cout << "\nVENDER:\n\n";
+      Mostrar_Vender_Cocina();
+      cout << "\nVolviendo al menu...\n";
+      return Mostrar_Menu ();
+      break;
+    case 3: cout << "\nREPORTES:\n\n";
+      Mostrar_Reportes();
+      cout << "\nVolviendo al menu...\n";
+      return Mostrar_Menu ();
+    case 4: cout << "\nCONFIGURACIÓN:\n\n";
+      Mostrar_Configuracion();
+      cout << "\nVolviendo al menu...\n";
+      return Mostrar_Menu ();
+    break;
+    case 5: cout << "\nSALIR\n\n";
+      int Opc_Salir;
+      cout << "¿Esta usted seguro de salir?\n";
+      cout << "\n 1.- SI ";
+      cout << "\n 2.- NO\n";
+      cin >> Opc_Salir;
+      if(Opc_Salir ==1) { 
+        cout << "\nHasta luego, vuelva pronto ;)";
+        exit(0);        
+      }
+      else if(Opc_Salir == 2) {
+       return Mostrar_Menu ();
+      }
+      else {
+        Mostrar_Mensaje_de_Error(); 
+        return Mostrar_Menu();
+      }
+      break;
+    default: Mostrar_Mensaje_de_Error();
+      return Mostrar_Menu();
+      break;
+  }  
 }
-
 /*==============PRINCIPAL===============*/
 
 int main() {
